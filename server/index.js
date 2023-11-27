@@ -20,8 +20,33 @@ const connectDB = async () => {
     }
 }
 
+app.post("/api/v1/bus", async (req, res) => {
+    const { busname, busnumber, totalseat, type } = req.body;
 
-app.post("/api/bus", async (req, res) => {
+    const bus = new Bus({
+        busname,
+        busnumber,
+        type,
+        totalseat
+    })
+
+    try {
+        const savedata = await bus.save();
+        res.status(201).json({
+            success: true,
+            data: savedata,
+            message: "Bus saved"
+        })
+    } catch (e) {
+        return res.json({
+            success: false,
+            message: e.message
+        })
+    }
+})
+
+
+app.post("/api/v2/bus", async (req, res) => {
     const { busname, busnumber, totalseat, bustype } = req.body;
 
     const bus = new Bus({
@@ -105,7 +130,65 @@ app.get("/api/users", async (req, res) => {
     }
 })
 
+app.put("/api/user/:id", async (req, res)=>{
+    const {id} = req.params;
+    const { name,busid,seatnumber,from,to,addarnumber}= req.body;
 
+    await User.updateOne({_id: id},{
+        $set:{
+            name,
+            busid,
+            seatnumber,
+            from,
+            to,
+            addarnumber
+        }
+    })
+    const updatuser = await User.findOne({ _id: id })
+
+    res.status(200).json({
+        success: "true",
+        data: updatuser,
+        message: "User Updated successfully..!"
+    })
+}) 
+
+app.patch("/api/user/:id", async (req, res)=>{
+    const {id} = req.params;
+    const { name,busid,seatnumber,from,to,addarnumber}= req.body;
+
+    await User.updateOne({_id: id},{
+        $set:{
+            name,
+            busid,
+            seatnumber,
+            from,
+            to,
+            addarnumber
+        }
+    })
+    const updatuser = await User.findOne({ _id: id })
+
+    res.status(200).json({
+        success: "true",
+        data: updatuser,
+        message: "User Updated successfully..!"
+    })
+}) 
+
+app.delete("/api/user/:id", async(req,res)=>{
+   try{
+    const {id} = req.params;
+    await User.deleteOne({ _id: id })
+
+    res.status(200).json({
+        success: "true",
+       message: "Data delete succesfully..!"
+    })
+   } catch(e){
+   console.log(e.message)
+   }
+})
 
 
 
