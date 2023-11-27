@@ -3,23 +3,23 @@ import { Schema, model } from "mongoose";
 const busSchema = new Schema ({
     busname:{
         type: String,
-        require:true
+        required:true
     },
     busnumber:{
         type:String,
-        require:true
+        required:true
     },
     totalseat:{
         type:Number,
-        require:true
+        required:true
     },
     bustype:{
         type:String,
         enum:['ac', 'non-ac'],
-        require: true
+        required: true
     }
 })
 
-const Bus = model("bus", busSchema);
+const Bus = model("Bus", busSchema);
 
 export default Bus ;
